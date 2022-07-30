@@ -61,6 +61,10 @@ class ClothingCollection(models.Model):
     def get_products_set(self):
         return self.clothing_products.all()
 
+    @property
+    def count_products_set(self):
+        return self.clothing_products.count()
+
 
 class Category(models.Model):
     title = models.CharField(max_length=256, default='', unique=True)
@@ -75,6 +79,10 @@ class Category(models.Model):
 
     def get_products_set(self):
         return self.clothing_products.all()
+
+    @property
+    def count_products_set(self):
+        return self.clothing_products.count()
 
 
 class ClothingProduct(models.Model):

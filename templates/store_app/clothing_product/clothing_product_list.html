@@ -89,8 +89,8 @@
                         <td>
                             {% for available_color in product_obj.available_colors.all %}
                                 <div class="product-obj-available-color"
-                                     style="width: 10px; height: 10px; background-color: {{ available_color.code }};
-                                             border: 1px solid #000;"
+                                     style="width: 15px; height: 15px; background-color: {{ available_color.code }};
+                                             border: 1px solid #000; border-radius: 50px"
                                 ></div>
                             {% endfor %}
                         </td>
@@ -120,6 +120,19 @@
                               <img src="{{product_obj.primary_image.url}}" alt="Product {{ product_obj.name }}"
                                 class="card-img collection-card-image"
                               />
+                              <div class="collection-card-secondary-div">
+                                  <p>Codigo: {{ product_obj.code }}</p>
+                                  <p>Precio: {{ product_obj.base_pricing }}</p>
+                                  <div class="collection-card-colors">
+                                  Colors:
+                                      {% for available_color in product_obj.available_colors.all %}
+                                        <div class="product-obj-available-color"
+                                             style="width: 15px; height: 15px; background-color: {{ available_color.code }};
+                                                     border: 1px solid #000; border-radius: 50px"
+                                        ></div>
+                                    {% endfor %}
+                                  </div>
+                              </div>
                               <div class="card-body collection-card-body">
                                   {{ product_obj.name }} {{ product_obj.code }}
                                   <a href="{% url 'admin_app:clothing-product-update' product_obj.id %}" class="list-obj-link">
@@ -203,7 +216,7 @@
             elem.style.visibility = "hidden";
         };
 
-        hide_obj_view(document.getElementById('clothingProductGrid'))
+        hide_obj_view(document.getElementById('clothingProductTable'))
 
         function changeObjListView(type_of_view){
             if(type_of_view){

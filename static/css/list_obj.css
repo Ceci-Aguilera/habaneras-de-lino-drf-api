@@ -86,6 +86,7 @@
     border: 1px solid transparent;
     border-radius: 0 !important;
     margin-bottom: 50px;
+    margin-top: -50px;
 }
 
 .collection-card-image{
@@ -105,4 +106,19 @@
     display: flex !important;
     flex-direction: row !important;
     column-gap: 10px !important;
+}
+
+.collection-card-secondary-div{
+    height: 330px !important;
+    width: 100% !important;
+    display:none;
+}
+
+.card .collection-card-image:hover{
+    display: none;
+}
+
+.card:hover .collection-card-secondary-div{
+    padding-top: 50px;
+    display: block;
 }
