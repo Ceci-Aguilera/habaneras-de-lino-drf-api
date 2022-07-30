@@ -109,10 +109,6 @@
                               <img src="{{collection_obj.image.url}}" alt="Collection {{ collection.title }}"
                                 class="card-img collection-card-image"
                               />
-                              <div class="collection-card-secondary-div">
-                                  <p>ID: {{ collection_obj.id }}</p>
-                                  <p>Productos: {{ collection_obj.count_products_set }}</p>
-                              </div>
                               <div class="card-body collection-card-body">
                                   {{ collection_obj.title }} {{ collection_obj.year }}
                                   <a href="{% url 'admin_app:collection-update' collection_obj.id %}" class="list-obj-link">

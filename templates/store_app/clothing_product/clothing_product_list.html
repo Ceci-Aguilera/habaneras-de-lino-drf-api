@@ -59,6 +59,16 @@
 
     </div>
 
+    <form action="" method="get">
+            {{ filter.form.name }}
+            <input type="submit" />
+        </form>
+
+        <form action="" method="get">
+            {{ filter.form.collections }}
+            <input type="submit" />
+        </form>
+
 
 {% if object_list %}
     <div class="list-obj-wrapper">
@@ -77,7 +87,7 @@
             <th scope="col">Eliminar</th>
         </tr>
       </thead>
-            {% for product_obj in object_list %}
+            {% for product_obj in filter.qs %}
                 <tbody>
                     <tr>
                         <th scope="row">{{ product_obj.id }}</th>
@@ -114,25 +124,12 @@
         <div class="grid" id="clothingProductGrid">
             <div class="container">
               <div class="row">
-                  {% for product_obj in object_list %}
+                  {% for product_obj in filter.qs %}
                       <div class="col-3">
                           <div class="card collection-card">
                               <img src="{{product_obj.primary_image.url}}" alt="Product {{ product_obj.name }}"
                                 class="card-img collection-card-image"
                               />
-                              <div class="collection-card-secondary-div">
-                                  <p>Codigo: {{ product_obj.code }}</p>
-                                  <p>Precio: {{ product_obj.base_pricing }}</p>
-                                  <div class="collection-card-colors">
-                                  Colors:
-                                      {% for available_color in product_obj.available_colors.all %}
-                                        <div class="product-obj-available-color"
-                                             style="width: 15px; height: 15px; background-color: {{ available_color.code }};
-                                                     border: 1px solid #000; border-radius: 50px"
-                                        ></div>
-                                    {% endfor %}
-                                  </div>
-                              </div>
                               <div class="card-body collection-card-body">
                                   {{ product_obj.name }} {{ product_obj.code }}
                                   <a href="{% url 'admin_app:clothing-product-update' product_obj.id %}" class="list-obj-link">

@@ -107,10 +107,6 @@
                               <img src="{{category_obj.image.url}}" alt="Category {{ category_obj.title }}"
                                 class="card-img collection-card-image"
                               />
-                              <div class="collection-card-secondary-div">
-                                  <p>ID: {{ category_obj.id }}</p>
-                                  <p>Productos: {{ category_obj.count_products_set }}</p>
-                              </div>
                               <div class="card-body collection-card-body">
                                   {{ category_obj.title }} {{ category_obj.year }}
                                   <a href="{% url 'admin_app:category-update' category_obj.id %}" class="list-obj-link">

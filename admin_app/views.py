@@ -8,6 +8,9 @@ from store_app.models import *
 
 from .forms import *
 
+import django_filters
+from django_filters.views import FilterView
+
 
 """
     Clothing Collection
@@ -242,14 +245,35 @@ class ClothingProductCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ClothingProductList(ListView):
+class ClothingProductFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains')
+    # collections = django_filters.ModelChoiceFilter(queryset=ClothingCollection.objects.all())
+
+    class Meta:
+        model = ClothingProduct
+        fields = ['name', 'collections']
+
+
+class ClothingProductList(FilterView):
     model = ClothingProduct
+    filterset_class = ClothingProductFilter
+    context_object_name = 'clothing_products'
     paginate_by = 10
     template_name = 'store_app/clothing_product/clothing_product_list.html'
 
-    def get_ordering(self):
-        ordering = self.request.GET.get('ordering', '-name')
-        return ordering
+# class ClothingProductList(ListView):
+#     model = ClothingProduct
+#     paginate_by = 10
+#     template_name = 'store_app/clothing_product/clothing_product_list.html'
+#
+#     def get_ordering(self):
+#         ordering = self.request.GET.get('ordering', '-name')
+#         return ordering
+#
+#     def get_queryset(self):
+#         qs = self.model.objects.all()
+#         clothing_products_filtered_list = ClothingProductFilter(self.request.GET, queryset=qs)
+#         return clothing_products_filtered_list.qs
 
 
 class ClothingProductUpdate(UpdateView):

@@ -7,6 +7,7 @@ from decimal import Decimal
 
 from .fields import *
 
+
 """
     Global Model: Manages global properties that may change with time, for example the relation US - MX value
 """
@@ -66,6 +67,11 @@ class ClothingCollection(models.Model):
         return self.clothing_products.count()
 
 
+"""
+    Category model. A category contains a name as unique 
+"""
+
+
 class Category(models.Model):
     title = models.CharField(max_length=256, default='', unique=True)
     description = models.TextField(blank=True)
@@ -83,6 +89,11 @@ class Category(models.Model):
     @property
     def count_products_set(self):
         return self.clothing_products.count()
+
+
+"""
+     Clothing Product Model
+"""
 
 
 class ClothingProduct(models.Model):

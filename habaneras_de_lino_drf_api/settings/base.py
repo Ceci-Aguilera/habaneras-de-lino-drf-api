@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'corsheaders',
+    'django_filters',
     'rest_framework',
     'fontawesomefree',
     'store_app',

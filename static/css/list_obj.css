@@ -107,18 +107,3 @@
     flex-direction: row !important;
     column-gap: 10px !important;
 }
-
-.collection-card-secondary-div{
-    height: 330px !important;
-    width: 100% !important;
-    display:none;
-}
-
-.card .collection-card-image:hover{
-    display: none;
-}
-
-.card:hover .collection-card-secondary-div{
-    padding-top: 50px;
-    display: block;
-}
