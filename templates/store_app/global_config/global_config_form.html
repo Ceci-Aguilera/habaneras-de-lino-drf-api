@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Nueva Coleccion{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/create_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+    <div class="create-obj-div">
+
+    <h4 class="create-obj-title">Configuracion</h4>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+                {{ form|crispy }}
+
+            <div class="create-obj-button-div">
+                <input class="btn btn-primary create-obj-button" type="submit" value="Guardar">
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}

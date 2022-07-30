@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gwendolyn:wght@400;700&family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,100;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+ <link href="{% static 'css/custom_base.css' %}" rel="stylesheet" type="text/css">
+
+{% block css %}
+
+{%  endblock %}
+
+
+    <title>{% block title %}Habaneras de Lino | Admin{% endblock %}</title>
+</head>
+<body class="body">
+  <main>
+
+  {% if user.is_authenticated %}
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand" href="{% url 'admin_app:index' %}">Habaneras de Lino</a>
+            <ul class="navbar-nav mt-2 mt-lg-0 justify-content-center">
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Productos</a>
+                  <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Mas Vendidos</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="{% url 'admin_app:clothing-product-list' %}">Todos</a>
+                  </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_app:collection-list' %}">Colecciones</a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_app:category-list' %}">Categorias</a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_app:custom-color-list' %}">Colores</a>
+              </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_app:global-config-list' %}">Configuracion</a>
+              </li>
+                 <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_app:logout' %}">Log Out</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+  {% else %}
+
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand" href="#">Habaneras de Lino</a>
+      </div>
+    </nav>
+{% endif %}
+
+
+    {% block content %}
+    {% endblock %}
+  </main>
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    {% block script_js %}
+
+    {% endblock %}
+
+</body>
+</html>

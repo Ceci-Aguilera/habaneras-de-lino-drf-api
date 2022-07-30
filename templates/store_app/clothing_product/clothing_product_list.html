@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Product{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/list_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+    <div class="list-obj-title-wrapper">
+
+        <div class="list-obj-title-nav">
+
+            <h4 class="list-obj-title">Productos</h4>
+
+            <div class="list-obj-add-div">
+                <div class="list-obj-menu-div">
+
+                    <div class="list-obj-menu-view">
+
+                        <div class="list-obj-menu-view-icon-div">
+                          <button class="btn btn-outline-light"
+                          onclick="changeObjListView(false)"
+                          >
+                                    <span style="color: #c0a16b;">
+                                       <i class="fa-solid fa-table-list"></i>
+                                   </span>
+                            </button>
+                      </div>
+
+                      <div class="list-obj-menu-view-icon-div">
+                          <button class="btn btn-outline-light"
+                            onclick="changeObjListView(true)"
+                          >
+                                    <span style="color: #c0a16b;">
+                                       <i class="fa-solid fa-grip"></i>
+                                   </span>
+                            </button>
+                      </div>
+
+                    </div>
+
+                    <button class="btn btn-outline-primary list-obj-add-button" >
+                       <a href="{% url 'admin_app:clothing-product-create' %}" class="list-obj-link">
+                            <span style="color: white;">
+                               <i class="fa-solid fa-plus list-obj-add"></i> Nuevo
+                           </span>
+                       </a>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% if object_list %}
+    <div class="list-obj-wrapper">
+
+        <table class="table" id="clothingProductTable">
+         <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Codigo</th>
+            <th scope="col">Collectiones</th>
+            <th scope="col">Categorias</th>
+            <th scope="col">Colores</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+            {% for product_obj in object_list %}
+                <tbody>
+                    <tr>
+                        <th scope="row">{{ product_obj.id }}</th>
+                         <td>{{ product_obj.name }}</td>
+                        <td>{{ product_obj.code }}</td>
+                        <td>{{ product_obj.collections.all.first.title }}</td>
+                        <td>{{ product_obj.categories.all.first.title }}</td>
+
+                        <td>
+                            {% for available_color in product_obj.available_colors.all %}
+                                <div class="product-obj-available-color"
+                                     style="width: 10px; height: 10px; background-color: {{ available_color.code }};
+                                             border: 1px solid #000;"
+                                ></div>
+                            {% endfor %}
+                        </td>
+                        <td>{{ product_obj.base_pricing }}</td>
+
+                        <td><a href="{% url 'admin_app:clothing-product-update' product_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-pen-to-square"></i> Editar
+                           </span>
+                        </a></td>
+                         <td><a href="{% url 'admin_app:clothing-product-delete' product_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-trash"></i> Eliminar
+                           </span>
+                        </a></td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+
+        <div class="grid" id="clothingProductGrid">
+            <div class="container">
+              <div class="row">
+                  {% for product_obj in object_list %}
+                      <div class="col-3">
+                          <div class="card collection-card">
+                              <img src="{{product_obj.primary_image.url}}" alt="Product {{ product_obj.name }}"
+                                class="card-img collection-card-image"
+                              />
+                              <div class="card-body collection-card-body">
+                                  {{ product_obj.name }} {{ product_obj.code }}
+                                  <a href="{% url 'admin_app:clothing-product-update' product_obj.id %}" class="list-obj-link">
+                                      <span style="color: #c0a16b;">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                      </span>
+                                  </a>
+                              </div>
+                          </div>
+                      </div>
+                  {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="list-obj-pagination-wrapper">
+
+        {% if is_paginated %}
+
+            <div class="container-wrap">
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3 text-center">
+                          <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                  <a class="page-link" href="?page={{page_obj.previous_page_number}}"
+                                    >&laquo;</a
+                                  >
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                  <a class="page-link" href="#">&laquo;</a>
+                                </li>
+                            {% endif %}
+
+                              {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="page-item"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item">
+                                      <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                              {% endfor %}
+
+                              {% if page_obj.has_next %}
+                                <li class="page-item">
+                                  <a href="?page={{page_obj.next_page_number}}" class="page-link"
+                                    >&raquo;</a
+                                  >
+                                </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                      <a class="page-link">&raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+
+                        </div>
+                    </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% else %}
+
+    <p>No hay ningun producto todavia</p>
+{% endif %}
+
+{% block script_js %}
+    <script>
+
+        var show_obj_view = function (elem) {
+        elem.style.visibility = "visible";
+        };
+
+        var hide_obj_view = function (elem) {
+            elem.style.visibility = "hidden";
+        };
+
+        hide_obj_view(document.getElementById('clothingProductGrid'))
+
+        function changeObjListView(type_of_view){
+            if(type_of_view){
+                hide_obj_view(document.getElementById('clothingProductTable'))
+                show_obj_view(document.getElementById('clothingProductGrid'))
+            }
+            else{
+                show_obj_view(document.getElementById('clothingProductTable'))
+                hide_obj_view(document.getElementById('clothingProductGrid'))
+            }
+        }
+    </script>
+{% endblock %}
+
+{% endblock %}

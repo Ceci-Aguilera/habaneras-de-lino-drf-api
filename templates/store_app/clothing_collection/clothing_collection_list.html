@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Collections{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/list_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+    <div class="list-obj-title-wrapper">
+
+        <div class="list-obj-title-nav">
+
+            <h4 class="list-obj-title">Colecciones</h4>
+
+            <div class="list-obj-add-div">
+                <div class="list-obj-menu-div">
+
+                    <div class="list-obj-menu-view">
+
+                        <div class="list-obj-menu-view-icon-div">
+                          <button class="btn btn-outline-light"
+                          onclick="changeObjListView(false)"
+                          >
+                                    <span style="color: #c0a16b;">
+                                       <i class="fa-solid fa-table-list"></i>
+                                   </span>
+                            </button>
+                      </div>
+
+                      <div class="list-obj-menu-view-icon-div">
+                          <button class="btn btn-outline-light"
+                            onclick="changeObjListView(true)"
+                          >
+                                    <span style="color: #c0a16b;">
+                                       <i class="fa-solid fa-grip"></i>
+                                   </span>
+                            </button>
+                      </div>
+
+                    </div>
+
+                    <button class="btn btn-outline-primary list-obj-add-button" >
+                       <a href="{% url 'admin_app:collection-create' %}" class="list-obj-link">
+                            <span style="color: white;">
+                               <i class="fa-solid fa-plus list-obj-add"></i> Nuevo
+                           </span>
+                       </a>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% if object_list %}
+    <div class="list-obj-wrapper">
+
+        <table class="table" id="clothingcollectionsTable">
+         <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Año</th>
+            <th scope="col">Productos</th>
+            <th scope="col">Detalles</th>
+            <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+            {% for collection_obj in object_list %}
+                <tbody>
+                    <tr>
+                        <th scope="row">{{ collection_obj.id }}</th>
+                         <td>{{ collection_obj.title }}</td>
+                        <td>{{ collection_obj.year }}</td>
+                        <td><a href="{% url 'admin_app:clothing-products-collection-filter' collection_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-shirt"></i> Productos
+                           </span>
+                        </a></td>
+                        <td><a href="{% url 'admin_app:collection-update' collection_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-pen-to-square"></i> Editar
+                           </span>
+                        </a></td>
+                         <td><a href="{% url 'admin_app:collection-delete' collection_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-trash"></i> Eliminar
+                           </span>
+                        </a></td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+
+        <div class="grid" id="clothingcollectionGrid">
+            <div class="container">
+              <div class="row">
+                  {% for collection_obj in object_list %}
+                      <div class="col-3">
+                          <div class="card collection-card">
+                              <img src="{{collection_obj.image.url}}" alt="Collection {{ collection.title }}"
+                                class="card-img collection-card-image"
+                              />
+                              <div class="card-body collection-card-body">
+                                  {{ collection_obj.title }} {{ collection_obj.year }}
+                                  <a href="{% url 'admin_app:collection-update' collection_obj.id %}" class="list-obj-link">
+                                      <span style="color: #c0a16b;">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                      </span>
+                                  </a>
+                              </div>
+                          </div>
+                      </div>
+                  {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="list-obj-pagination-wrapper">
+
+        {% if is_paginated %}
+
+            <div class="container-wrap">
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3 text-center">
+                          <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                  <a class="page-link" href="?page={{page_obj.previous_page_number}}"
+                                    >&laquo;</a
+                                  >
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                  <a class="page-link" href="#">&laquo;</a>
+                                </li>
+                            {% endif %}
+
+                              {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="page-item"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item">
+                                      <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                              {% endfor %}
+
+                              {% if page_obj.has_next %}
+                                <li class="page-item">
+                                  <a href="?page={{page_obj.next_page_number}}" class="page-link"
+                                    >&raquo;</a
+                                  >
+                                </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                      <a class="page-link">&raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+
+                        </div>
+                    </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% else %}
+
+    <p>No hay ninugna coleccion todavia</p>
+{% endif %}
+
+{% block script_js %}
+    <script>
+
+        var show_obj_view = function (elem) {
+        elem.style.visibility = "visible";
+        };
+
+        var hide_obj_view = function (elem) {
+            elem.style.visibility = "hidden";
+        };
+
+        hide_obj_view(document.getElementById('clothingcollectionGrid'))
+
+        function changeObjListView(type_of_view){
+            if(type_of_view){
+                hide_obj_view(document.getElementById('clothingcollectionsTable'))
+                show_obj_view(document.getElementById('clothingcollectionGrid'))
+            }
+            else{
+                show_obj_view(document.getElementById('clothingcollectionsTable'))
+                hide_obj_view(document.getElementById('clothingcollectionGrid'))
+            }
+        }
+    </script>
+{% endblock %}
+
+{% endblock %}

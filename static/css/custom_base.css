@@ -1,0 +1,29 @@
+.body{
+    font-family: "Montserrat", sans-serif !important;
+}
+
+.navbar-brand{
+    color: #204d74;
+    margin-left: 50px;
+    font-family: 'Gwendolyn', cursive;
+    font-size: 3.0rem;
+    font-weight: bold;
+}
+
+.navbar-nav{
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.nav-link{
+    color: #204d74;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-link:hover{
+    color: #2e6da4;
+    border-bottom: 2px solid #c0a16b;
+}

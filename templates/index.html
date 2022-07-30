@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Habaneras de Lino | Admin{% endblock %}
+
+
+{% block content %}
+  {% if user.is_authenticated %}
+      <div>
+      </div>
+    {% else %}
+
+      <p>You are not logged in</p>
+      <a href="{% url 'admin_app:login' %}">Log In</a>
+
+
+  {% endif %}
+{% endblock %}

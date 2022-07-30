@@ -1,0 +1,108 @@
+.list-obj-title-wrapper{
+    color: #c0a16b;
+    margin: auto;
+    margin-bottom: 25px !important;
+    padding-top: 50px !important;
+    border-top: 2px solid #c0a16b;
+    text-align: center;
+}
+
+.list-obj-title-nav{
+    width: 99%;
+    max-width: 1000px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+.list-obj-title-div{
+    margin: auto;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.list-obj-title{
+    margin: auto;
+    text-align: center;
+}
+
+.list-obj-add-div{
+    margin: auto;
+    margin-right: 0 !important;
+}
+
+.list-obj-menu-div, .list-obj-menu-view{
+    display: flex;
+    flex-direction: row;
+}
+
+.list-obj-menu-view{
+    margin-right: 50px;
+}
+
+.list-obj-add-button{
+    background-color: #204d74 !important;
+    border-radius: 0;
+    border: 0;
+}
+
+.list-obj-add-button:hover {
+    background-color: #2e6da4 !important;
+    color: white !important;
+}
+
+.list-obj-link{
+    text-decoration: none !important;
+}
+
+.list-obj-wrapper{
+    width: 99%;
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.list-obj-pagination-wrapper{
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+    position: fixed;
+    bottom: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination, .page-links, .nav-pagination{
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.collection-card{
+    border: 1px solid transparent;
+    border-radius: 0 !important;
+    margin-bottom: 50px;
+}
+
+.collection-card-image{
+    border: 1px solid #44444455;
+    border-radius: 0 !important;
+    height: 330px;
+}
+
+.collection-card-body{
+    color: #204d74;
+    text-align: center;
+}
+
+.horizontal-td{
+    width: 100% !important;
+    min-width: max-content !important;
+    display: flex !important;
+    flex-direction: row !important;
+    column-gap: 10px !important;
+}

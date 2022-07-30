@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Nuevo Producto{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/create_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+    <div class="create-obj-div">
+
+    <h4 class="create-obj-title">Producto</h4>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+             <div class="row">
+                 <div class="form-group col-md-4 mb-0">
+                    {{ form.code|as_crispy_field }}
+                </div>
+                <div class="form-group col-md-8 mb-0">
+                    {{ form.name|as_crispy_field }}
+                </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-md-6 mb-0">
+                {{ form.collections|as_crispy_field }}
+              </div>
+              <div class="form-group col-md-6 mb-0">
+                {{ form.categories|as_crispy_field }}
+              </div>
+            </div>
+
+            {{ form.base_pricing|as_crispy_field }}
+            {{ form.available_colors|as_crispy_field }}
+
+            <div class="input-group mb-3">
+              <label class="input-group-text label-img" for="principalImage">Imagen principal</label>
+              <input name="primary_image" type="file" class="form-control" id="principalImage" required>
+            </div>
+
+            <div class="input-group mb-3">
+              <label class="input-group-text label-img" for="secondaryImage">Imagen secundaria</label>
+              <input name="secondary_image" type="file" class="form-control" id="secondaryImage" required>
+            </div>
+
+            <div class="input-group mb-3">
+              <label class="input-group-text label-img" for="extraImage">Extras</label>
+              <input name="extra_images" type="file" class="form-control" id="extraImage" multiple="multiple">
+            </div>
+
+            <div class="create-obj-button-div">
+                <input class="btn btn-primary create-obj-button" type="submit" value="Guardar">
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}
