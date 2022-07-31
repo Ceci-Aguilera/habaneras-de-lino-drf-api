@@ -230,6 +230,11 @@ class ClothingProductCreate(CreateView):
     def get_success_url(self):
         return reverse('admin_app:clothing-product-list')
 
+    def get_context_data(self, **kwargs):
+        context = super(ClothingProductCreate, self).get_context_data(**kwargs)
+        context['picture_required'] = True
+        return context
+
     def form_valid(self, form):
         self.object = form.save()
         if 'primary_image' in self.request.FILES:
@@ -257,7 +262,6 @@ class ClothingProductFilter(django_filters.FilterSet):
 
 class ClothingProductSimpleFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
-    # collections = django_filters.ModelChoiceFilter(queryset=ClothingCollection.objects.all())
 
     class Meta:
         model = ClothingProduct
@@ -283,6 +287,11 @@ class ClothingProductUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('admin_app:clothing-product-list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ClothingProductUpdate, self).get_context_data(**kwargs)
+        context['picture_required'] = False
+        return context
 
     def form_valid(self, form):
         self.object = form.save()

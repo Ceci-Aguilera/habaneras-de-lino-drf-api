@@ -43,12 +43,12 @@
 
             <div class="input-group mb-3">
               <label class="input-group-text label-img" for="principalImage">Imagen principal</label>
-              <input name="primary_image" type="file" class="form-control" id="principalImage" required>
+              <input name="primary_image" type="file" class="form-control" id="principalImage" {% if picture_required %}required{% endif %}>
             </div>
 
             <div class="input-group mb-3">
               <label class="input-group-text label-img" for="secondaryImage">Imagen secundaria</label>
-              <input name="secondary_image" type="file" class="form-control" id="secondaryImage" required>
+              <input name="secondary_image" type="file" class="form-control" id="secondaryImage" {% if picture_required %}required{% endif %}>
             </div>
 
             <div class="input-group mb-3">
