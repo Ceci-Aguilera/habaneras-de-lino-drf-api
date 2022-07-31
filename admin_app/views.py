@@ -247,11 +247,21 @@ class ClothingProductCreate(CreateView):
 
 class ClothingProductFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
+    collections = django_filters.ModelChoiceFilter(queryset=ClothingCollection.objects.all())
+    categories = django_filters.ModelChoiceFilter(queryset=Category.objects.all())
+
+    class Meta:
+        model = ClothingProduct
+        fields = ['name', 'collections', 'categories']
+
+
+class ClothingProductSimpleFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains')
     # collections = django_filters.ModelChoiceFilter(queryset=ClothingCollection.objects.all())
 
     class Meta:
         model = ClothingProduct
-        fields = ['name', 'collections']
+        fields = ['name',]
 
 
 class ClothingProductList(FilterView):
@@ -261,19 +271,9 @@ class ClothingProductList(FilterView):
     paginate_by = 10
     template_name = 'store_app/clothing_product/clothing_product_list.html'
 
-# class ClothingProductList(ListView):
-#     model = ClothingProduct
-#     paginate_by = 10
-#     template_name = 'store_app/clothing_product/clothing_product_list.html'
-#
-#     def get_ordering(self):
-#         ordering = self.request.GET.get('ordering', '-name')
-#         return ordering
-#
-#     def get_queryset(self):
-#         qs = self.model.objects.all()
-#         clothing_products_filtered_list = ClothingProductFilter(self.request.GET, queryset=qs)
-#         return clothing_products_filtered_list.qs
+    def get_ordering(self):
+        ordering = self.request.GET.get('ordering', '-name')
+        return ordering
 
 
 class ClothingProductUpdate(UpdateView):
@@ -283,6 +283,36 @@ class ClothingProductUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('admin_app:clothing-product-list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        if 'primary_image' in self.request.FILES:
+            primary_image = self.request.FILES['primary_image']
+            try:
+                old_primary_image = ClothingProductImage.objects.get(type_of_image="PRIMARY", product=self.object)
+                old_primary_image.delete()
+            except:
+                pass
+            ClothingProductImage.objects.create(image=primary_image, type_of_image="PRIMARY", product=self.object)
+        if 'secondary_image' in self.request.FILES:
+            secondary_image = self.request.FILES['secondary_image']
+            try:
+                old_secondary_image = ClothingProductImage.objects.get(type_of_image="SECONDARY", product=self.object)
+                old_secondary_image.delete()
+            except:
+                pass
+            ClothingProductImage.objects.create(image=secondary_image, type_of_image="SECONDARY", product=self.object)
+        if len(self.request.FILES.getlist('extra_images')) > 0:
+            extra_images = self.request.FILES.getlist('extra_images')
+            try:
+                old_extra_images = ClothingProductImage.objects.filter(type_of_image="EXTRA", product=self.object)
+                for old_extra_image in old_extra_images:
+                    old_extra_image.delete()
+            except:
+                pass
+            for extra_image in extra_images:
+                ClothingProductImage.objects.create(image=extra_image, type_of_image="EXTRA", product=self.object)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ClothingProductDelete(DeleteView):
@@ -297,15 +327,18 @@ class ClothingProductDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ClothingProductFilterCollection(ListView):
+class ClothingProductFilterCollection(FilterView):
     model = ClothingProduct
     paginate_by = 10
+    filterset_class = ClothingProductSimpleFilter
+    context_object_name = 'clothing_products'
     template_name = 'store_app/clothing_product/clothing_product_list.html'
+    ordering = ['-name']
 
     def get_queryset(self, **kwargs):
         collection_pk = self.kwargs['pk']
         collection = ClothingCollection.objects.get(pk=collection_pk)
-        return collection.get_products_set()
+        return collection.get_products_set().order_by('name')
 
     def get_ordering(self):
         ordering = self.request.GET.get('ordering', '-name')

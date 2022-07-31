@@ -99,9 +99,12 @@ class Category(models.Model):
 class ClothingProduct(models.Model):
     name = models.CharField(max_length=256, default='', unique=True)
     code = models.CharField(max_length=50, default='')
-    collections = models.ManyToManyField(ClothingCollection, related_name="clothing_products")
-    categories = models.ManyToManyField(Category, related_name="clothing_products")
-    available_colors = models.ManyToManyField(CustomColor, related_name="clothing_products")
+    collections = models.ManyToManyField(ClothingCollection, related_name="clothing_products",
+                                         related_query_name="clothing_products")
+    categories = models.ManyToManyField(Category, related_name="clothing_products",
+                                        related_query_name="clothing_products")
+    available_colors = models.ManyToManyField(CustomColor, related_name="clothing_products",
+                                              related_query_name="clothing_products")
     base_pricing = CurrencyDecimalField()
 
     def __str__(self):

@@ -59,15 +59,32 @@
 
     </div>
 
-    <form action="" method="get">
-            {{ filter.form.name }}
-            <input type="submit" />
-        </form>
+    <div class="filters-div">
+            <form action="" method="get" class="row filters-form">
+                <div class="form-group mb-0 product-filter-div">
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.name | as_crispy_field }}
+                    </div>
+                    {% if filter.form.collections %}
+                        <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                            {{ filter.form.collections | as_crispy_field }}
+                        </div>
+                    {% endif %}
+                     {% if filter.form.categories %}
+                        <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                            {{ filter.form.categories | as_crispy_field }}
+                        </div>
+                    {% endif %}
 
-        <form action="" method="get">
-            {{ filter.form.collections }}
-            <input type="submit" />
-        </form>
+
+                    <div class="product-filter-wrapper product-filter-form-button">
+                        <input class="btn btn-primary" type="submit" value="Buscar" />
+                    </div>
+                </div>
+            </form>
+    </div>
+
+
 
 
 {% if object_list %}

@@ -106,9 +106,11 @@
                   {% for collection_obj in object_list %}
                       <div class="col-3">
                           <div class="card collection-card">
-                              <img src="{{collection_obj.image.url}}" alt="Collection {{ collection.title }}"
-                                class="card-img collection-card-image"
-                              />
+                              <a href="{% url 'admin_app:clothing-products-collection-filter' collection_obj.id %}" class="list-obj-link">
+                                  <img src="{{collection_obj.image.url}}" alt="Collection {{ collection.title }}"
+                                    class="card-img collection-card-image"
+                                  />
+                              </a>
                               <div class="card-body collection-card-body">
                                   {{ collection_obj.title }} {{ collection_obj.year }}
                                   <a href="{% url 'admin_app:collection-update' collection_obj.id %}" class="list-obj-link">
