@@ -40,3 +40,35 @@ class ClothingProductListAPIView(ListAPIView):
         context = super(ClothingProductListAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class ClothingCollectionListAPIView(ListAPIView):
+    authentication_classes = []
+    serializer_class = ClothingCollectionSerializer
+    model = ClothingCollection
+    queryset = ClothingCollection.objects.all()
+    pagination_class = None
+
+    def get_serializer_context(self):
+        context = super(ClothingCollectionListAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+class ClothingCollectionsByNameYearLisAPIView(ListAPIView):
+    authentication_classes = []
+    serializer_class = ClothingCollectionSerializer
+    model = ClothingCollection
+    pagination_class = None
+
+    def get_queryset(self):
+        queryset = ClothingCollection.objects.all()
+        return queryset
+
+    def get_serializer_context(self):
+        context = super(ClothingCollectionsByNameYearLisAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

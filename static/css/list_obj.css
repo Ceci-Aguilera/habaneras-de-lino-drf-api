@@ -126,3 +126,8 @@
 .filters-form{
     text-align: center !important;
 }
+
+.grid > .container{
+    position: absolute !important;
+    top: 400px !important;
+}
