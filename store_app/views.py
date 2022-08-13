@@ -40,3 +40,17 @@ class ClothingProductListAPIView(ListAPIView):
         context = super(ClothingProductListAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class ClothingCollectionListAPIView(ListAPIView):
+    authentication_classes = []
+    serializer_class = ClothingCollectionSerializer
+    model = ClothingCollection
+    queryset = ClothingCollection.objects.all()
+    pagination_class = None
+
+    def get_serializer_context(self):
+        context = super(ClothingCollectionListAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
