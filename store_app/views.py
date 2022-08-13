@@ -42,6 +42,20 @@ class ClothingProductListAPIView(ListAPIView):
         return context
 
 
+class ClothingProductDetailAPIView(RetrieveAPIView):
+    authentication_classes = []
+    serializer_class = ClothingProductSimpleSerializer
+    model = ClothingProduct
+    lookup_field = 'id'
+    queryset = ClothingProduct.objects.all()
+    pagination_class = None
+
+    def get_serializer_context(self):
+        context = super(ClothingProductDetailAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
 class ClothingCollectionListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = ClothingCollectionSerializer

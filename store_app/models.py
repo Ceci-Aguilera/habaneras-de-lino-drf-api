@@ -105,6 +105,9 @@ class ClothingProduct(models.Model):
                                         related_query_name="clothing_products")
     available_colors = models.ManyToManyField(CustomColor, related_name="clothing_products",
                                               related_query_name="clothing_products")
+
+    tag = models.CharField(max_length=50, choices=TAG_OPTIONS, default='SHIRT')
+
     base_pricing = CurrencyDecimalField()
 
     def __str__(self):

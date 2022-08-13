@@ -38,3 +38,9 @@ IMAGE_CHOICES = (
     ('SECONDARY', 'SECONDARY'),
     ('EXTRA', 'EXTRA')
 )
+
+TAG_OPTIONS = (
+    ('SHIRT', 'SHIRT'),
+    ('PANTS', 'PANTS'),
+    ('DRESS', 'DRESS')
+)
