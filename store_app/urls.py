@@ -8,4 +8,6 @@ urlpatterns = [
             name='clothing-products-api-list'),
     re_path('clothing-collections/$', ClothingCollectionListAPIView.as_view(),
             name='clothing-collections-api-list'),
+    re_path('clothing-collections/filter/names/$', ClothingCollectionsByNameYearLisAPIView.as_view(),
+            name='clothing-collections-api-list'),
 ]

@@ -54,3 +54,21 @@ class ClothingCollectionListAPIView(ListAPIView):
         context.update({"request": self.request})
         return context
 
+
+class ClothingCollectionsByNameYearLisAPIView(ListAPIView):
+    authentication_classes = []
+    serializer_class = ClothingCollectionSerializer
+    model = ClothingCollection
+    pagination_class = None
+
+    def get_queryset(self):
+        queryset = ClothingCollection.objects.all()
+        return queryset
+
+    def get_serializer_context(self):
+        context = super(ClothingCollectionsByNameYearLisAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
