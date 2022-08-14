@@ -23,6 +23,10 @@ from rest_framework.pagination import PageNumberPagination
 from .models import *
 from .serializers import *
 
+# =====================================================
+#   PRODUCTS
+# =====================================================
+
 
 class ProductsPagination(PageNumberPagination):
     page_size = 16
@@ -54,6 +58,11 @@ class ClothingProductDetailAPIView(RetrieveAPIView):
         context = super(ClothingProductDetailAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+# =====================================================
+#   COLLECTIONS
+# =====================================================
 
 
 class ClothingCollectionListAPIView(ListAPIView):
@@ -98,5 +107,37 @@ class ClothingCollectionDetailAPIView(RetrieveAPIView):
 
     def get_serializer_context(self):
         context = super(ClothingCollectionDetailAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+# =====================================================
+#   CATEGORIES
+# =====================================================
+
+
+class CategoryListAPIView(ListAPIView):
+    authentication_classes = []
+    serializer_class = CategorySerializer
+    model = Category
+    queryset = Category.objects.all()
+    pagination_class = None
+
+    def get_serializer_context(self):
+        context = super(CategoryListAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+class CategoryDetailAPIView(RetrieveAPIView):
+    authentication_classes = []
+    serializer_class = CategorySerializer
+    model = Category
+    lookup_field = 'id'
+    queryset = Category.objects.all()
+    pagination_class = None
+
+    def get_serializer_context(self):
+        context = super(CategoryDetailAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context

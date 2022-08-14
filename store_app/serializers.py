@@ -67,3 +67,22 @@ class ClothingCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClothingCollection
         fields = ['title', 'description', 'year', 'image', 'products', 'id', ]
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    image = serializers.SerializerMethodField('get_image')
+    products = serializers.SerializerMethodField('get_products')
+
+    def get_products(self, obj):
+        serializer_context = {'request': self.context.get('request')}
+        clothing_products = obj.clothing_products.all()
+        return ClothingProductSimpleSerializer(clothing_products, many=True, context=serializer_context).data
+
+    def get_image(self, obj):
+        request = self.context.get("request")
+        return request.build_absolute_uri(obj.image.url)
+
+    class Meta:
+        model = ClothingCollection
+        fields = ['title', 'description', 'image', 'products', 'id', ]

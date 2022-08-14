@@ -14,4 +14,6 @@ urlpatterns = [
             name='clothing-collections-api-list'),
     re_path('clothing-collections/(?P<id>[0-9]+)/$', ClothingCollectionDetailAPIView.as_view(),
             name='clothing-collections-api-detail'),
+    re_path('categories/$', CategoryListAPIView.as_view(), name='categories-api-list'),
+    re_path('categories/(?P<id>[0-9]+)/$', CategoryDetailAPIView.as_view(), name='categories-api-detail'),
 ]
