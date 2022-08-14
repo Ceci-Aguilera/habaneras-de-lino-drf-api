@@ -12,4 +12,6 @@ urlpatterns = [
             name='clothing-collections-api-list'),
     re_path('clothing-collections/filter/names/$', ClothingCollectionsByNameYearLisAPIView.as_view(),
             name='clothing-collections-api-list'),
+    re_path('clothing-collections/(?P<id>[0-9]+)/$', ClothingCollectionDetailAPIView.as_view(),
+            name='clothing-collections-api-detail'),
 ]

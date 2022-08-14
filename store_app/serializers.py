@@ -66,4 +66,4 @@ class ClothingCollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClothingCollection
-        fields = ['title', 'description', 'year', 'image', 'products', ]
+        fields = ['title', 'description', 'year', 'image', 'products', 'id', ]
