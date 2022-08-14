@@ -86,3 +86,31 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ClothingCollection
         fields = ['title', 'description', 'image', 'products', 'id', ]
+
+
+class ProductVariationSerializer(serializers.ModelSerializer):
+    product = serializers.SerializerMethodField('get_product')
+    color =  CustomColorSerializer()
+
+    def get_product(self, obj):
+        serializer_context = {'request': self.context.get('request')}
+        clothing_product = obj.product
+        return ClothingProductSimpleSerializer(clothing_product, context=serializer_context).data
+
+    class Meta:
+        model = ProductVariation
+        fields = '__all__'
+
+
+class CartSerializer(serializers.ModelSerializer):
+
+    product_variations = serializers.SerializerMethodField('get_product_variations')
+
+    def get_product_variations(self, obj):
+        serializer_context = {'request': self.context.get('request')}
+        product_variations = ProductVariation.objects.filter(cart=obj)
+        return ProductVariationSerializer(product_variations, many=True, context=serializer_context).data
+
+    class Meta:
+        model = Cart
+        fields = ['id', 'total_amount', 'created_date', 'is_active', 'token', 'product_variations']

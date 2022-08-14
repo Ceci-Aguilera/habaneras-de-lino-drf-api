@@ -141,3 +141,45 @@ class CategoryDetailAPIView(RetrieveAPIView):
         context = super(CategoryDetailAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+# =====================================================
+#   CATEGORIES
+# =====================================================
+
+
+class ProductVariationCreateAPIView(CreateAPIView):
+    authentication_classes = []
+    serializer_class = ProductVariationSerializer
+    model = ProductVariation
+
+    def get_serializer_context(self):
+        context = super(ProductVariationCreateAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        product_variation = serializer.save()
+        product_amount = product_variation.quantity + product_variation.product.base_pricing
+        token = self.request.data['cart_token']
+
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ipaddress = x_forwarded_for.split(',')[-1].strip()
+        else:
+            ipaddress = request.META.get('REMOTE_ADDR')
+
+        try:
+            cart = Cart.objects.get(ip_address=ipaddress, token=token)
+            cart.total_amount = cart.total_amount + product_amount
+        except:
+            new_token = urlsafe_base64_encode(force_bytes(randint(1,999999)))
+            cart = Cart(token=new_token, total_amount=product_amount)
+
+        cart.save()
+        product_variation.cart = cart
+        product_variation.save()
+        cart_serializer = CartSerializer(cart,  context={"request": request})
+        return Response(cart_serializer.data, status=status.HTTP_201_CREATED)

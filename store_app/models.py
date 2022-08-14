@@ -109,6 +109,7 @@ class ClothingProduct(models.Model):
     tag = models.CharField(max_length=50, choices=TAG_OPTIONS, default='SHIRT')
 
     base_pricing = CurrencyDecimalField()
+    amount_sold = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name + " " + self.code
@@ -139,3 +140,26 @@ class ClothingProductImage(models.Model):
 
     def __str__(self):
         return self.product.name + " " + self.type_of_image
+
+
+class Cart(models.Model):
+    total_amount = CurrencyDecimalField()
+    created_date = models.DateTimeField(auto_now_add=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    ip_address = models.GenericIPAddressField()
+    token = models.CharField(max_length=256, default='', blank=True)
+
+    def __str__(self):
+        return self.created_date + " " + "Activo" if (self.is_active) else "Inactivo" + " " + str(self.total_amount)
+
+
+class ProductVariation(models.Model):
+    product = models.ForeignKey(ClothingProduct, on_delete=models.CASCADE)
+    principal_color = models.ForeignKey(CustomColor, on_delete=models.CASCADE)
+    size = models.CharField(max_length=50, default='S')
+    sleeve = models.CharField(max_length=50, default='None', blank=True)
+    quantity = models.IntegerField(default=1)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.product.name + " " + self.product.color.nickname + " " + str(self.quantity)
