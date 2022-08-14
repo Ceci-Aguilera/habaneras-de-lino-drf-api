@@ -21,11 +21,15 @@
             {% csrf_token %}
 
              <div class="row">
-                 <div class="form-group col-md-4 mb-0">
+                 <div class="form-group col-md-3 mb-0">
                     {{ form.code|as_crispy_field }}
                 </div>
-                <div class="form-group col-md-8 mb-0">
+                <div class="form-group col-md-6 mb-0">
                     {{ form.name|as_crispy_field }}
+                </div>
+
+                 <div class="form-group col-md-3 mb-0">
+                    {{ form.tag|as_crispy_field }}
                 </div>
             </div>
 

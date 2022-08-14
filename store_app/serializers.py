@@ -15,11 +15,19 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CustomColorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomColor
+        fields = '__all__'
+
+
 class ClothingProductSimpleSerializer(serializers.ModelSerializer):
 
     primary_image = serializers.SerializerMethodField('get_primary_image')
     secondary_image = serializers.SerializerMethodField('get_secondary_image')
     extra_images = serializers.SerializerMethodField('get_extra_images')
+    available_colors = CustomColorSerializer(many=True)
 
     def get_primary_image(self, obj):
         serializer_context = {'request': self.context.get('request')}
@@ -38,8 +46,8 @@ class ClothingProductSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClothingProduct
-        fields = ['name', 'collections', 'categories', 'base_pricing', 'primary_image', 'secondary_image',
-                  'extra_images']
+        fields = ['id', 'name', 'available_colors', 'tag', 'code', 'collections', 'categories', 'base_pricing',
+                  'primary_image', 'secondary_image', 'extra_images']
 
 
 class ClothingCollectionSerializer(serializers.ModelSerializer):
