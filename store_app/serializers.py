@@ -90,12 +90,19 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductVariationSerializer(serializers.ModelSerializer):
     product = serializers.SerializerMethodField('get_product')
-    color =  CustomColorSerializer()
+    principal_color =  CustomColorSerializer()
 
     def get_product(self, obj):
         serializer_context = {'request': self.context.get('request')}
         clothing_product = obj.product
         return ClothingProductSimpleSerializer(clothing_product, context=serializer_context).data
+
+    class Meta:
+        model = ProductVariation
+        fields = '__all__'
+
+
+class ProductVariationCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductVariation

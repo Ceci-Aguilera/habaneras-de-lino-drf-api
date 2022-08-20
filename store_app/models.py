@@ -150,7 +150,7 @@ class Cart(models.Model):
     token = models.CharField(max_length=256, default='', blank=True)
 
     def __str__(self):
-        return self.created_date + " " + "Activo" if (self.is_active) else "Inactivo" + " " + str(self.total_amount)
+        return str(self.created_date) + " " + "Activo" if (self.is_active) else "Inactivo" + " " + str(self.total_amount)
 
 
 class ProductVariation(models.Model):
@@ -159,7 +159,7 @@ class ProductVariation(models.Model):
     size = models.CharField(max_length=50, default='S')
     sleeve = models.CharField(max_length=50, default='None', blank=True)
     quantity = models.IntegerField(default=1)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.product.name + " " + self.product.color.nickname + " " + str(self.quantity)
+        return self.product.name + " " + self.principal_color.nickname + " " + str(self.quantity)
