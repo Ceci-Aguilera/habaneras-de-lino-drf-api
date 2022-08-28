@@ -149,6 +149,7 @@ dmypy.json
 .pytype/
 
 .staticfiles/
+.staticfiles/*
 
 # operating system-related files
 # file properties cache/storage on macOS

@@ -70,5 +70,6 @@ class ClothingProductForm(ModelForm):
             'collections': 'Colecciones',
             'categories': 'Categorias',
             'available_colors': 'Colores disponibles',
-            'base_pricing': 'Precio base'
+            'base_pricing': 'Precio base',
+            'amount_sold': 'Cantidad Vendida'
         }
