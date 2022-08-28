@@ -192,11 +192,18 @@ class ProductVariationCreateAPIView(CreateAPIView):
 
 class ProductVariationRetrieveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     authentication_classes = []
-    serializer_class = ProductVariationSerializer
+    # serializer_class = ProductVariationSerializer
     model = ProductVariation
     lookup_field = 'id'
     queryset = ProductVariation.objects.all()
     pagination_class = None
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            self.serializer_class = ProductVariationCreateSerializer
+        else:
+            self.serializer_class = ProductVariationSerializer
+        return self.serializer_class
 
     def get_serializer_context(self):
         context = super(ProductVariationRetrieveUpdateDeleteAPIView, self).get_serializer_context()
