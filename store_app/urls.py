@@ -16,4 +16,8 @@ urlpatterns = [
             name='clothing-collections-api-detail'),
     re_path('categories/$', CategoryListAPIView.as_view(), name='categories-api-list'),
     re_path('categories/(?P<id>[0-9]+)/$', CategoryDetailAPIView.as_view(), name='categories-api-detail'),
+    re_path('product-variations/$', ProductVariationCreateAPIView.as_view(), name='product-variation-api-create'),
+    re_path('cart/(?P<token>[0-9A-Za-z_\-]+)/$', CartDetailAPIView.as_view(), name='cart-api-detail'),
+    re_path('product-variations/(?P<id>[0-9]+)/$', ProductVariationRetrieveUpdateDeleteAPIView.as_view(),
+            name='product-variations-api-detail-update-delete'),
 ]
