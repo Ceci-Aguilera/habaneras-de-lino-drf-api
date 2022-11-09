@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import *
 
+from decimal import Decimal
+
 
 class ProductImageSerializer(serializers.ModelSerializer):
 
@@ -112,11 +114,19 @@ class ProductVariationCreateSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
 
     product_variations = serializers.SerializerMethodField('get_product_variations')
+    total_amount = serializers.SerializerMethodField('get_total_amount')
 
     def get_product_variations(self, obj):
         serializer_context = {'request': self.context.get('request')}
         product_variations = ProductVariation.objects.filter(cart=obj)
         return ProductVariationSerializer(product_variations, many=True, context=serializer_context).data
+
+    def get_total_amount(self, obj):
+        total_amount = Decimal(0.0000)
+        product_variations = ProductVariation.objects.filter(cart=obj).values('quantity', 'product__base_pricing')
+        for prod in product_variations:
+            total_amount = total_amount + (prod['quantity'] * prod['product__base_pricing'])
+        return total_amount
 
     class Meta:
         model = Cart
