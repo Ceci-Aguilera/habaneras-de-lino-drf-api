@@ -163,3 +163,43 @@ class ProductVariation(models.Model):
 
     def __str__(self):
         return self.product.name + " " + self.principal_color.nickname + " " + str(self.quantity)
+
+
+class Address(models.Model):
+    street = models.CharField(max_length=256, blank=False)
+    apt_suite = models.CharField(max_length=50, blank=True)
+    city = models.CharField(max_length=50, blank=False)
+    usa_state = models.CharField(max_length=50, choices=USA_STATE_CHOICES, default='Florida')
+    zip_code = models.CharField(max_length=5, blank=False, default='00000')
+
+
+class Payment(models.Model):
+    ip_address = models.GenericIPAddressField()
+    email = models.CharField(max_length=256, default='-1')
+    stripe_charge_id = models.CharField(max_length=50)
+    amount = CurrencyDecimalField()
+    timestamp = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    refund = models.CharField(max_length=256, choices=REFUND_STATUS_CHOICES, default='NO REFUND ASKED')
+
+    def __str__(self):
+        if ((self.email != "") and (self.email != '-1')):
+            return self.email + " - " + self.timestamp.strftime("%b. %-d, %Y, %-I:%M %p")
+        else:
+            return str(self.ip_address) + " - " + self.timestamp.strftime("%b. %-d, %Y, %-I:%M %p")
+
+
+class Order(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    email = models.EmailField(blank=False)
+    phone = models.CharField(max_length=20 ,blank=True)
+    first_name = models.CharField(max_length=50, blank=False)
+    last_name = models.CharField(max_length=50, blank=False)
+    shipping_address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    ordered_date = models.DateTimeField(auto_now_add=True, blank=True,null=True)
+    ordered = models.BooleanField(default=False)
+    status = models.CharField(max_length=256, default="Ordered")
+    payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, blank=True)
+    comments = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.email - str(self.created)
