@@ -131,3 +131,27 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ['id', 'total_amount', 'created_date', 'is_active', 'token', 'product_variations']
+
+
+class AddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payment
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    comments = serializers.CharField(required=False)
+    email = serializers.EmailField(required=True)
+    address = AddressSerializer()
+
+    class Meta:
+        model = Order
+        fields = ['cart', 'email', 'phone', 'first_name', 'last_name', 'shipping_address', 'zip_code',]

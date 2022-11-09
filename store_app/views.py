@@ -192,7 +192,6 @@ class ProductVariationCreateAPIView(CreateAPIView):
 
 class ProductVariationRetrieveUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     authentication_classes = []
-    # serializer_class = ProductVariationSerializer
     model = ProductVariation
     lookup_field = 'id'
     queryset = ProductVariation.objects.all()
@@ -243,3 +242,20 @@ class CartDetailAPIView(RetrieveAPIView):
         except:
             cart = None
         return cart
+
+
+# =====================================================
+#   ORDER
+# =====================================================
+
+
+class OrderCreateAPIView(CreateAPIView):
+    authentication_classes = []
+    serializer_class = OrderSerializer
+    model = Order
+
+    def get_serializer_context(self):
+        context = super(OrderCreateAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
