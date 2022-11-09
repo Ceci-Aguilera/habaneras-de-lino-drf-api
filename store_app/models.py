@@ -143,11 +143,18 @@ class ClothingProductImage(models.Model):
 
 
 class Cart(models.Model):
-    total_amount = CurrencyDecimalField()
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     is_active = models.BooleanField(default=True)
     ip_address = models.GenericIPAddressField()
     token = models.CharField(max_length=256, default='', blank=True)
+
+    @property
+    def total_amount(self):
+        items = self.product_variation_set.all()
+        total = 0
+        for product_variation in items:
+            total += (product_variation.quantity * product_variation.product.base_pricing)
+        return total
 
     def __str__(self):
         return str(self.created_date) + " " + "Activo" if (self.is_active) else "Inactivo" + " " + str(self.total_amount)
@@ -159,7 +166,7 @@ class ProductVariation(models.Model):
     size = models.CharField(max_length=50, default='S')
     sleeve = models.CharField(max_length=50, default='None', blank=True)
     quantity = models.IntegerField(default=1)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True, related_name='product_variation_set')
 
     def __str__(self):
         return self.product.name + " " + self.principal_color.nickname + " " + str(self.quantity)
@@ -194,12 +201,13 @@ class Order(models.Model):
     phone = models.CharField(max_length=20 ,blank=True)
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
-    shipping_address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    shipping_address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     ordered_date = models.DateTimeField(auto_now_add=True, blank=True,null=True)
     ordered = models.BooleanField(default=False)
-    status = models.CharField(max_length=256, default="Ordered")
+    status = models.CharField(max_length=256, choices=ORDER_STATUS_CHOICES, default='ORDEN_CREADA')
+    shipping_tracking_id = models.CharField(max_length=256, default='', null=True, blank=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, blank=True)
     comments = models.TextField(blank=True)
 
     def __str__(self):
-        return self.email - str(self.created)
+        return self.email + ' - ' + str(self.ordered_date)

@@ -13,6 +13,7 @@ from django.utils.encoding import force_bytes
 import json
 from datetime import datetime
 from random import randint
+import decimal
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -22,6 +23,10 @@ from rest_framework.pagination import PageNumberPagination
 
 from .models import *
 from .serializers import *
+
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # =====================================================
 #   PRODUCTS
@@ -162,10 +167,8 @@ class ProductVariationCreateAPIView(CreateAPIView):
         serializer = self.serializer_class(data=self.request.data)
         # serializer.is_valid(raise_exception=True)
         if not serializer.is_valid():
-            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         product_variation = serializer.save()
-        product_amount = product_variation.quantity + product_variation.product.base_pricing
 
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -175,13 +178,10 @@ class ProductVariationCreateAPIView(CreateAPIView):
 
         try:
             token = self.request.data['cart_token']
-            print("Cart token found")
             cart = Cart.objects.get(ip_address=ipaddress, token=token, is_active=True)
-            cart.total_amount = cart.total_amount + product_amount
         except:
-            print('No Cart Token')
             new_token = urlsafe_base64_encode(force_bytes(randint(1,999999)))
-            cart = Cart(ip_address=ipaddress, token=new_token, total_amount=product_amount)
+            cart = Cart(ip_address=ipaddress, token=new_token)
 
         cart.save()
         product_variation.cart = cart
@@ -258,4 +258,96 @@ class OrderCreateAPIView(CreateAPIView):
         context = super(OrderCreateAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+    def post(self, request):
+        serializer = self.serializer_class(data=self.request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        shipping_address_serializer = AddressSerializer(data=request.data['shipping_address'])
+        if not shipping_address_serializer.is_valid():
+            return Response(shipping_address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        shipping_address = shipping_address_serializer.save()
+        order = serializer.save(shipping_address=shipping_address)
+
+        #Try making payment
+        try:
+            card_num = request.data['card_num']
+            exp_month = request.data['exp_month']
+            exp_year = request.data['exp_year']
+            cvc = request.data['cvc']
+
+            token = stripe.Token.create(
+                card={
+                    "number": card_num,
+                    "exp_month": int(exp_month),
+                    "exp_year": int(exp_year),
+                    "cvc": cvc
+                },
+            )
+
+            amount = float(order.cart.total_amount + order.cart.total_amount * decimal.Decimal(0.07))
+            amount = int(amount * 100)
+            shipping_dictionary = {
+                'address': {
+                    'city': order.shipping_address.city,
+                    'country': 'United States',
+                    'line1': order.shipping_address.street,
+                    'line2': order.shipping_address.apt_suite,
+                    'postal_code': order.shipping_address.zip_code,
+                    'state': order.shipping_address.usa_state,
+                },
+                'name': order.first_name + " " + order.last_name,
+                'phone': order.phone if order.phone else '---'
+            }
+
+            charge = stripe.Charge.create(
+                amount=amount,
+                currency="usd",
+                source=token,
+                shipping=shipping_dictionary,
+                receipt_email=order.email
+            )
+
+            stripe_charge_id = charge['id']
+            amount = amount / 100
+            payment = Payment(email=order.email, ip_address=order.cart.ip_address, stripe_charge_id=stripe_charge_id,
+                              amount=amount)
+            payment.save()
+            order.ordered = True
+            order.payment = payment
+            order.save()
+            order.cart.last = False
+            order.cart.save()
+
+            return Response({"Result": "Success"}, status=status.HTTP_200_OK)
+
+        except stripe.error.CardError as e:
+            order.delete()
+            return Response({"Result": "Error with card during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except stripe.error.RateLimitError as e:
+            order.delete()
+            return Response({"Result": "Rate Limit error during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except stripe.error.InvalidRequestError as e:
+            order.delete()
+            return Response({"Result": "Invalid request error during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except stripe.error.AuthenticationError as e:
+            order.delete()
+            return Response({"Result": "Authentication error during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except stripe.error.APIConnectionError as e:
+            order.delete()
+            return Response({"Result": "API connection error during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except stripe.error.StripeError as e:
+            order.delete()
+            return Response({"Result": "Something went wrong during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            order.delete()
+            return Response({"Result": "Error during payment"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
