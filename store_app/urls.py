@@ -20,4 +20,5 @@ urlpatterns = [
     re_path('cart/(?P<token>[0-9A-Za-z_\-]+)/$', CartDetailAPIView.as_view(), name='cart-api-detail'),
     re_path('product-variations/(?P<id>[0-9]+)/$', ProductVariationRetrieveUpdateDeleteAPIView.as_view(),
             name='product-variations-api-detail-update-delete'),
+    re_path('orders/$', OrderCreateAPIView.as_view(), name='orders-create')
 ]

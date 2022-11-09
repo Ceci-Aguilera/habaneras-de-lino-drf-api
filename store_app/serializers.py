@@ -112,6 +112,10 @@ class ProductVariationCreateSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
 
     product_variations = serializers.SerializerMethodField('get_product_variations')
+    total_amount = serializers.SerializerMethodField('get_total_amount')
+
+    def get_total_amount(self, obj):
+        return obj.total_amount
 
     def get_product_variations(self, obj):
         serializer_context = {'request': self.context.get('request')}
@@ -138,10 +142,8 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    comments = serializers.CharField(required=False)
     email = serializers.EmailField(required=True)
-    address = AddressSerializer()
 
     class Meta:
         model = Order
-        fields = ['cart', 'email', 'phone', 'first_name', 'last_name', 'shipping_address', 'zip_code',]
+        fields = ['cart', 'email', 'phone', 'first_name', 'last_name']
