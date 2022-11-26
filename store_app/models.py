@@ -46,7 +46,7 @@ class CustomColor(models.Model):
 
 
 """
-    Collection model. A collection contains a name and a year as unique 
+    Collection model. A collection contains a name and a year as unique
 """
 
 
@@ -68,7 +68,7 @@ class ClothingCollection(models.Model):
 
 
 """
-    Category model. A category contains a name as unique 
+    Category model. A category contains a name as unique
 """
 
 
@@ -157,7 +157,9 @@ class Cart(models.Model):
         return total
 
     def __str__(self):
-        return str(self.created_date) + " " + "Activo" if (self.is_active) else "Inactivo" + " " + str(self.total_amount)
+        return self.created_date.strftime('%d %B %Y, %H:%M %p') + " , $" +\
+            str(self.total_amount) + " , " +\
+            "Activo" if (self.is_active) else "Inactivo"
 
 
 class ProductVariation(models.Model):
@@ -178,6 +180,9 @@ class Address(models.Model):
     city = models.CharField(max_length=50, blank=False)
     usa_state = models.CharField(max_length=50, choices=USA_STATE_CHOICES, default='Florida')
     zip_code = models.CharField(max_length=5, blank=False, default='00000')
+
+    def __str__(self):
+        return self.street + " " + self.apt_suite + " " + self.city + " " + self.usa_state + " " + self.zip_code
 
 
 class Payment(models.Model):

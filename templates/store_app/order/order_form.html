@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Nueva Orden{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/create_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+    <div class="create-obj-div">
+
+    <h4 class="create-obj-title">Orden</h4>
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+            <b>{{ field }}</b>: {{ error }}
+            {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="row">
+             <div class="form-group col-md-6 mb-0">
+               {{ form.first_name|as_crispy_field }}
+             </div>
+             <div class="form-group col-md-6 mb-0">
+               {{ form.last_name|as_crispy_field }}
+             </div>
+           </div>
+
+           <div class="row">
+             <div class="form-group col-md-6 mb-0">
+               {{ form.email|as_crispy_field }}
+             </div>
+             <div class="form-group col-md-6 mb-0">
+               {{ form.phone|as_crispy_field }}
+             </div>
+           </div>
+
+             <div class="row">
+              <div class="form-group col-md-6 mb-0">
+                {{ form.cart|as_crispy_field }}
+              </div>
+              <div class="form-group col-md-6 mb-0">
+                {{ form.shipping_address|as_crispy_field }}
+              </div>
+            </div>
+
+            <div class="row">
+             <div class="form-group col-md-6 mb-0">
+                {{ form.shipping_tracking_id|as_crispy_field }}
+             </div>
+             <div class="form-group col-md-6 mb-0">
+               {{ form.status|as_crispy_field }}
+             </div>
+           </div>
+
+                {{ form.comments|as_crispy_field }}
+
+            <div class="create-obj-button-div">
+                <input class="btn btn-primary create-obj-button" type="submit" value="Guardar">
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}

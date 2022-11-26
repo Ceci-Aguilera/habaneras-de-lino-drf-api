@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 from django.urls import reverse
 
 from store_app.models import *
+from store_app.fields import ORDER_STATUS_CHOICES
 
 from .forms import *
 
@@ -367,3 +368,70 @@ class ClothingProductFilterCategory(ListView):
     def get_ordering(self):
         ordering = self.request.GET.get('ordering', '-name')
         return ordering
+
+
+"""
+    Orders
+"""
+
+class OrderFilter(django_filters.FilterSet):
+    first_name = django_filters.CharFilter(lookup_expr='icontains')
+    last_name = django_filters.CharFilter(lookup_expr='icontains')
+    email = django_filters.CharFilter(lookup_expr='icontains')
+    phone = django_filters.CharFilter(lookup_expr='icontains')
+    status = django_filters.ChoiceFilter(choices=ORDER_STATUS_CHOICES)
+
+    class Meta:
+        model = ClothingProduct
+        fields = ['first_name', 'last_name', 'email', 'phone', 'status']
+
+
+class OrderList(FilterView):
+    model = Order
+    filterset_class = OrderFilter
+    context_object_name = 'orders'
+    paginate_by = 10
+    template_name = 'store_app/order/order_list.html'
+
+    def get_ordering(self):
+        ordering = self.request.GET.get('ordered_date')
+        return ordering
+
+    def get_queryset(self):
+        return Order.objects.filter(ordered=True)
+
+
+class OrderCreate(CreateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'store_app/order/order_form.html'
+
+    def get_success_url(self):
+        return reverse('admin_app:order-list')
+
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.ordered = True
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+class OrderUpdate(UpdateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'store_app/order/order_form.html'
+
+    def get_success_url(self):
+        return reverse('admin_app:order-list')
+
+
+class OrderDelete(DeleteView):
+    model = Order
+    template_name = 'store_app/delete_obj_form.html'
+
+    def get_success_url(self):
+        return reverse('admin_app:order-list')
+
+    def post(self, request, *args, **kwargs):
+        super(OrderDelete, self).delete(request, *args, **kwargs)
+        return HttpResponseRedirect(self.get_success_url())
