@@ -16,54 +16,23 @@
 
         <div class="list-obj-title-nav">
 
-            <h4 class="list-obj-title">Ordenes</h4>
+            <h4 class="list-obj-title">Pagos</h4>
 
             <div class="list-obj-add-div">
                 <div class="list-obj-menu-div">
 
                     <button class="btn btn-outline-primary list-obj-add-button" >
-                        <a href="{% url 'admin_app:order-create' %}" class="list-obj-link">
+                       <a href="{% url 'admin_app:payment-create' %}" class="list-obj-link">
                             <span style="color: white;">
                                <i class="fa-solid fa-plus list-obj-add"></i> Nuevo
                            </span>
-                         </a>
+                       </a>
                     </button>
                 </div>
             </div>
 
         </div>
 
-    </div>
-
-    <div class="filters-div">
-            <form action="" method="get" class="row filters-form">
-                <div class="form-group mb-0 product-filter-div">
-
-                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
-                        {{ filter.form.first_name | as_crispy_field }}
-                    </div>
-
-                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
-                        {{ filter.form.last_name | as_crispy_field }}
-                    </div>
-
-                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
-                        {{ filter.form.email | as_crispy_field }}
-                    </div>
-
-                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
-                        {{ filter.form.phone | as_crispy_field }}
-                    </div>
-
-                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
-                        {{ filter.form.status | as_crispy_field }}
-                    </div>
-
-                    <div class="product-filter-wrapper product-filter-form-button">
-                        <input class="btn btn-primary" type="submit" value="Buscar" />
-                    </div>
-                </div>
-            </form>
     </div>
 
 
@@ -74,42 +43,30 @@
          <thead>
         <tr>
             <th scope="col">ID</th>
-            <th scope="col">Nombre</th>
             <th scope="col">Email</th>
-            <th scope="col">Celular</th>
+            <th scope="col">ID de Stripe</th>
+            <th scope="col">Cantidad</th>
             <th scope="col">Fecha</th>
-            <th scope="col">Status</th>
-            <th scope="col">Direccion</th>
-            <th scope="col">Shipping ID</th>
-            <th scope="col">Total</th>
-            <th scope="col">Detalles</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th scope="col">Refund</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
         </tr>
       </thead>
-            {% for user_order_obj in object_list %}
+            {% for payment_obj in object_list %}
                 <tbody>
                     <tr>
-                        <th scope="row">{{ user_order_obj.id }}</th>
-                        <td>{{ user_order_obj.first_name }} {{ user_order_obj.last_name }}</td>
-                        <td>{{ user_order_obj.email }}</td>
-                        <td>{{ user_order_obj.phone }}</td>
-                        <td>{{ user_order_obj.ordered_date }}</td>
-                        <td>{{ user_order_obj.status }}</td>
-                        <td>{{ user_order_obj.shipping_address }}</td>
-                        <td>{{ user_order_obj.shipping_tracking_id }}</td>
-                        <td>{{ user_order_obj.payment.amount }}</td>
-                        <td><a href="{% url 'admin_app:order-detail' user_order_obj.id %}" class="list-obj-link">
-                            <span style="color: #c0a16b;">
-                               <i class="fa-solid fa-eye"></i> Detalles
-                           </span>
-                        </a></td>
-                        <td><a href="{% url 'admin_app:order-update' user_order_obj.id %}" class="list-obj-link">
+                        <th scope="row">{{ payment_obj.id }}</th>
+                        <td>{{ payment_obj.email }}</td>
+                        <td>{{ payment_obj.stripe_charge_id }}</td>
+                        <td>${{ payment_obj.amount }}</td>
+                        <td>{{ payment_obj.timestamp }}</td>
+                        <td>{{ payment_obj.refund }}</td>
+                        <td><a href="{% url 'admin_app:payment-update' payment_obj.id %}" class="list-obj-link">
                             <span style="color: #c0a16b;">
                                <i class="fa-solid fa-pen-to-square"></i> Editar
                            </span>
                         </a></td>
-                         <td><a href="{% url 'admin_app:order-delete' user_order_obj.id %}" class="list-obj-link">
+                        <td><a href="{% url 'admin_app:payment-delete' payment_obj.id %}" class="list-obj-link">
                             <span style="color: #c0a16b;">
                                <i class="fa-solid fa-trash"></i> Eliminar
                            </span>

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Configuraciones{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/detail_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+<div class="detail-obj-div">
+
+  <h4 class="detail-obj-title">Orden</h4>
+
+  <div class="detail-obj-wrapper">
+
+    <div class="row detail-obj-info-row">
+
+        <div class="col-md-6 mb-0 detail-obj-info-col">
+
+          <div class="detail-obj-info-col-wrapper">
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">ID del carrito: </span>
+              <p class="detail-obj-info-p">{{object.cart.id}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Nombre: </span>
+              <p class="detail-obj-info-p">{{object.first_name}} {{object.last_name}}</p>
+            </div>
+
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Email: </span>
+              <p class="detail-obj-info-p">{{object.email}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Celular: </span>
+              <p class="detail-obj-info-p">{{object.phone}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Direccion de envio: </span>
+              <p class="detail-obj-info-p">{{object.shipping_address}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">ID del shipping (UPS/Fedex): </span>
+              <p class="detail-obj-info-p">{{object.shipping_address_id}}</p>
+            </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6 mb-0 detail-obj-info-col">
+
+          <div class="detail-obj-info-col-wrapper">
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Cantidad pagada: </span>
+              <p class="detail-obj-info-p">${{object.payment.amount}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">ID de Stripe: </span>
+              <p class="detail-obj-info-p">{{object.payment.stripe_charge_id}}</p>
+            </div>
+
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Refund: </span>
+              <p class="detail-obj-info-p">{{object.payment.refund}}</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="order-detail-comments-div">
+            <span class="detail-obj-info-span">Comentarios: </span>
+            <p class="detail-obj-info-p">{{object.comments}}</p>
+        </div>
+
+        <div class="order-detail-cart-div">
+
+          {% for prod in object.cart.product_variation_set.all %}
+
+            <div class="card order-detail-cart-card">
+                <div class="card-header order-detail-cart-card-hearder">
+                  <div class="card-header-row"
+                    <p>{{prod.product.name}} - ({{prod.product.code}})</p>
+                    <p><a class="order-detail-link" href={{prod.product.primary_image.url}} target="_blank">Ver Foto <span style="color: #c0a16b;"><i class="fa-solid fa-eye"></i></span></a></p>
+                  </div>
+                </div>
+                <div class="card-body order-detail-cart-card-body">
+
+                  <div class="row order-detail-cart-card-body-row">
+                    <div class="col-md-4 mb-0 detail-obj-info-div">
+                      <div class="detail-obj-info-div-wrapper">
+                        <span class="detail-obj-info-span">Cantidad: </span>
+                        <p class="detail-obj-info-p">{{prod.quantity}}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-0 detail-obj-info-div">
+                      <div class="detail-obj-info-div-wrapper">
+                        <span class="detail-obj-info-span">Precio por unidad: </span>
+                        <p class="detail-obj-info-p">${{prod.product.base_pricing}}</p>
+                      </div>
+                    </div>
+                    <div class=" col-md-4 mb-0detail-obj-info-div">
+                      <div class="detail-obj-info-div-wrapper">
+                        <span class="detail-obj-info-span">Precio total: </span>
+                        <p class="detail-obj-info-p">${% widthratio prod.quantity 1 prod.product.base_pricing %}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row order-detail-cart-card-body-row">
+                    <div class="col-md-4 mb-0 detail-obj-info-div">
+                      <div class="detail-obj-info-div-wrapper">
+                        <span class="detail-obj-info-span">Talla: </span>
+                        <p class="detail-obj-info-p">{{prod.size}}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-0 detail-obj-info-div">
+                      <div class="detail-obj-info-div-wrapper">
+                        <span class="detail-obj-info-span">Manga: </span>
+                        <p class="detail-obj-info-p">{{prod.sleeve}}</p>
+                      </div>
+                    </div>
+                    <div class=" col-md-4 mb-0detail-obj-info-div">
+                      <div class="detail-obj-info-div-wrapper">
+                        <span class="detail-obj-info-span">Color: </span>
+                        <p class="detail-obj-info-p">
+                          <div style="height: 30px; width: 30px; background-color: {{prod.principal_color.code}}; border: 1px solid #444444; border-radius: 50%;"></div>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+
+          {% endfor %}
+        </div>
+
+      </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

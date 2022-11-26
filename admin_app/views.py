@@ -2,10 +2,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
+from django.views.generic import DetailView
 from django.urls import reverse
 
 from store_app.models import *
-from store_app.fields import ORDER_STATUS_CHOICES
+from store_app.fields import ORDER_STATUS_CHOICES, REFUND_STATUS_CHOICES
 
 from .forms import *
 
@@ -430,4 +431,74 @@ class OrderDelete(DeleteView):
 
     def post(self, request, *args, **kwargs):
         super(OrderDelete, self).delete(request, *args, **kwargs)
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class OrderDetail(DetailView):
+    model = Order
+    template_name = 'store_app/order/order_detail.html'
+    queryset = Order.objects.all()
+
+
+"""
+    Payments
+"""
+class PaymentFilter(django_filters.FilterSet):
+    email = django_filters.CharFilter(lookup_expr='icontains')
+    refund = django_filters.ChoiceFilter(choices=REFUND_STATUS_CHOICES)
+
+    class Meta:
+        model = Payment
+        fields = ['email', 'refund']
+
+
+class PaymentList(FilterView):
+    model = Payment
+    filterset_class = PaymentFilter
+    context_object_name = 'payments'
+    paginate_by = 10
+    template_name = 'store_app/payment/payment_list.html'
+
+    def get_queryset(self):
+        return Payment.objects.order_by('-timestamp')
+
+
+class PaymentCreate(CreateView):
+    model = Payment
+    form_class = PaymentForm
+    template_name = 'store_app/payment/payment_form.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = self.request.META.get('REMOTE_ADDR')
+        self.object.ip_address = ip
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('admin_app:payment-list')
+
+
+class PaymentUpdate(UpdateView):
+    model = Payment
+    form_class = PaymentForm
+    template_name = 'store_app/payment/payment_form.html'
+
+    def get_success_url(self):
+        return reverse('admin_app:payment-list')
+
+
+class PaymentDelete(DeleteView):
+    model = Payment
+    template_name = 'store_app/delete_obj_form.html'
+
+    def get_success_url(self):
+        return reverse('admin_app:payment-list')
+
+    def post(self, request, *args, **kwargs):
+        super(PaymentDelete, self).delete(request, *args, **kwargs)
         return HttpResponseRedirect(self.get_success_url())

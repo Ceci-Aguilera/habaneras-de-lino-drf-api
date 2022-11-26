@@ -91,3 +91,15 @@ class OrderForm(ModelForm):
             'status': 'Estado de la orden',
             'comments': 'Commentarios a tener en cuenta para la orden'
         }
+
+
+class PaymentForm(ModelForm):
+    class Meta:
+        model = Payment
+        fields = ('email', 'stripe_charge_id', 'amount', 'refund')
+        labels = {
+            'email': 'Email del cliente',
+            'stripe_charge_id': 'ID de pago en Stripe',
+            'amount': 'Cantidad (incluye taxes + shipping)',
+            'refund': 'Refund',
+        }
