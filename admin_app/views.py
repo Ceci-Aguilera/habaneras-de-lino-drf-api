@@ -393,12 +393,8 @@ class OrderList(FilterView):
     paginate_by = 10
     template_name = 'store_app/order/order_list.html'
 
-    def get_ordering(self):
-        ordering = self.request.GET.get('ordered_date')
-        return ordering
-
     def get_queryset(self):
-        return Order.objects.filter(ordered=True)
+        return Order.objects.filter(ordered=True).order_by('-ordered_date')
 
 
 class OrderCreate(CreateView):

@@ -35,6 +35,37 @@
 
     </div>
 
+    <div class="filters-div">
+            <form action="" method="get" class="row filters-form">
+                <div class="form-group mb-0 product-filter-div">
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.first_name | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.last_name | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.email | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.phone | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.status | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-button">
+                        <input class="btn btn-primary" type="submit" value="Buscar" />
+                    </div>
+                </div>
+            </form>
+    </div>
+
 
 {% if object_list %}
     <div class="list-obj-wrapper">
