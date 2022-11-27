@@ -108,23 +108,26 @@
     column-gap: 10px !important;
 }
 
-.product-filter-div{
-    display: flex !important;
-    flex-direction: row !important;
-}
-
-.product-filter-form-button{
-    padding-top: 30px;
-}
-
-.filters-div{
+.filters-div {
     margin-left: 50px !important;
     margin-right: 50px !important;
     text-align: center !important;
 }
 
-.filters-form{
+.filters-form {
     text-align: center !important;
+}
+
+.product-filter-div{
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.product-filter-form-button{
+    padding-top: 30px;
 }
 
 .grid > .container{

@@ -73,3 +73,33 @@ class ClothingProductForm(ModelForm):
             'base_pricing': 'Precio base',
             'amount_sold': 'Cantidad Vendida'
         }
+
+
+class OrderForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = ('cart', 'email', 'phone', 'first_name', 'last_name', 'status',
+                  'shipping_address', 'shipping_tracking_id', 'comments')
+        labels = {
+            'cart': 'Carrito',
+            'email': 'Email del cliente',
+            'phone': 'Celular del cliente',
+            'first_name': 'Nombre del cliente',
+            'last_name': 'Apellido del cliente',
+            'shipping_address': 'Direccion del cliente',
+            'shipping_tracking_id': 'ID del shipping (UPS/Fedex)',
+            'status': 'Estado de la orden',
+            'comments': 'Commentarios a tener en cuenta para la orden'
+        }
+
+
+class PaymentForm(ModelForm):
+    class Meta:
+        model = Payment
+        fields = ('email', 'stripe_charge_id', 'amount', 'refund')
+        labels = {
+            'email': 'Email del cliente',
+            'stripe_charge_id': 'ID de pago en Stripe',
+            'amount': 'Cantidad (incluye taxes + shipping)',
+            'refund': 'Refund',
+        }

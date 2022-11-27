@@ -39,4 +39,15 @@ urlpatterns = [
             name='clothing-products-collection-filter'),
     re_path(r'^categories/(?P<pk>[^/]*)/clothing-products/$', ClothingProductFilterCategory.as_view(),
             name='clothing-products-category-filter'),
+    # Orders
+    re_path('orders/$', OrderList.as_view(), name='order-list'),
+    re_path(r'^orders/create/$', OrderCreate.as_view(), name='order-create'),
+    re_path(r'^orders/(?P<pk>[^/]*)/update/$', OrderUpdate.as_view(), name='order-update'),
+    re_path(r'^orders/(?P<pk>[^/]*)/delete/$', OrderDelete.as_view(), name='order-delete'),
+    re_path(r'^orders/(?P<pk>[^/]*)/datail/$', OrderDetail.as_view(), name='order-detail'),
+    #Payment
+    re_path(r'^payments/create/$', PaymentCreate.as_view(), name='payment-create'),
+    re_path('payments/$', PaymentList.as_view(), name='payment-list'),
+    re_path('categpaymentsories/(?P<pk>[^/]*)/delete/$', PaymentDelete.as_view(), name='payment-delete'),
+    re_path(r'^payments/(?P<pk>[^/]*)/update/$', PaymentUpdate.as_view(), name='payment-update'),
 ]

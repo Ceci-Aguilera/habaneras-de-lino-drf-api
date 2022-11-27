@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Configuraciones{% endblock %}
+
+
+{% block css %}
+      <link href="{% static 'css/list_obj.css' %}" rel="stylesheet">
+{%  endblock %}
+
+{% block content %}
+
+    <div class="list-obj-title-wrapper">
+
+        <div class="list-obj-title-nav">
+
+            <h4 class="list-obj-title">Pagos</h4>
+
+            <div class="list-obj-add-div">
+                <div class="list-obj-menu-div">
+
+                    <button class="btn btn-outline-primary list-obj-add-button" >
+                       <a href="{% url 'admin_app:payment-create' %}" class="list-obj-link">
+                            <span style="color: white;">
+                               <i class="fa-solid fa-plus list-obj-add"></i> Nuevo
+                           </span>
+                       </a>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="filters-div">
+            <form action="" method="get" class="filters-form">
+                <div class="row product-filter-div">
+
+                  <div class="product-filter-wrapper product-filter-form-field col-md-2"></div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.email | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-3">
+                        {{ filter.form.refund | as_crispy_field }}
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-button col-md-2">
+                        <input class="btn btn-primary" type="submit" value="Buscar" />
+                    </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-2"></div>
+                </div>
+            </form>
+    </div>
+
+
+{% if object_list %}
+    <div class="list-obj-wrapper">
+
+        <table class="table" id="globalconfigTable">
+         <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Email</th>
+            <th scope="col">ID de Stripe</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Refund</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+            {% for payment_obj in object_list %}
+                <tbody>
+                    <tr>
+                        <th scope="row">{{ payment_obj.id }}</th>
+                        <td>{{ payment_obj.email }}</td>
+                        <td>{{ payment_obj.stripe_charge_id }}</td>
+                        <td>${{ payment_obj.amount }}</td>
+                        <td>{{ payment_obj.timestamp }}</td>
+                        <td>{{ payment_obj.refund }}</td>
+                        <td><a href="{% url 'admin_app:payment-update' payment_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-pen-to-square"></i> Editar
+                           </span>
+                        </a></td>
+                        <td><a href="{% url 'admin_app:payment-delete' payment_obj.id %}" class="list-obj-link">
+                            <span style="color: #c0a16b;">
+                               <i class="fa-solid fa-trash"></i> Eliminar
+                           </span>
+                        </a></td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+
+
+    <div class="list-obj-pagination-wrapper">
+
+        {% if is_paginated %}
+
+            <div class="container-wrap">
+                    <div class="row">
+                        <div class="col-md-12 col-md-offset-3 text-center">
+                          <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                  <a class="page-link" href="?page={{page_obj.previous_page_number}}"
+                                    >&laquo;</a
+                                  >
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                  <a class="page-link" href="#">&laquo;</a>
+                                </li>
+                            {% endif %}
+
+                              {% for i in paginator.page_range %}
+                                {% if page_obj.number == i %}
+                                    <li class="page-item"><a class="page-link active">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item">
+                                      <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                              {% endfor %}
+
+                              {% if page_obj.has_next %}
+                                <li class="page-item">
+                                  <a href="?page={{page_obj.next_page_number}}" class="page-link"
+                                    >&raquo;</a
+                                  >
+                                </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                      <a class="page-link">&raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+
+                        </div>
+                    </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% else %}
+
+    <p>No hay ninugna configuracion todavia</p>
+{% endif %}
+
+
+
+{% endblock %}
