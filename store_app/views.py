@@ -83,21 +83,24 @@ class ClothingCollectionListAPIView(ListAPIView):
         return context
 
 
-class ClothingCollectionsByNameYearLisAPIView(ListAPIView):
+class ClothingCollectionsByNameYearListAPIView(ListAPIView):
     authentication_classes = []
     serializer_class = ClothingCollectionSerializer
     model = ClothingCollection
     pagination_class = None
 
     def get_queryset(self):
-        queryset = ClothingCollection.objects.all()
+        name = list(self.request.data['name'])
+        year = self.request.data['year']
+        queryset = ClothingCollection.objects.filter(title__in=name, year=year)
+        print(queryset)
         return queryset
 
     def get_serializer_context(self):
-        context = super(ClothingCollectionsByNameYearLisAPIView, self).get_serializer_context()
+        context = super(ClothingCollectionsByNameYearListAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
-    
+
     def post(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -146,6 +149,26 @@ class CategoryDetailAPIView(RetrieveAPIView):
         context = super(CategoryDetailAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class CategoriesByNameListAPIView(ListAPIView):
+        authentication_classes = []
+        serializer_class = CategorySerializer
+        model = Category
+        pagination_class = None
+
+        def get_queryset(self):
+            name = list(self.request.data['name'])
+            queryset = Category.objects.filter(title__in=name)
+            return queryset
+
+        def get_serializer_context(self):
+            context = super(CategoriesByNameListAPIView, self).get_serializer_context()
+            context.update({"request": self.request})
+            return context
+
+        def post(self, request, *args, **kwargs):
+            return self.list(request, *args, **kwargs)
 
 
 # =====================================================
@@ -348,6 +371,3 @@ class OrderCreateAPIView(CreateAPIView):
         except:
             order.delete()
             return Response({"Result": "Error during payment"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
