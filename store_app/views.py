@@ -284,12 +284,12 @@ class OrderCreateAPIView(CreateAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=self.request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'Result': 'Personal information is not valid'}, status=status.HTTP_400_BAD_REQUEST)
         shipping_address_serializer = AddressSerializer(data=request.data['shipping_address'])
         if not shipping_address_serializer.is_valid():
-            return Response(shipping_address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'Result': 'Shipping information is not valid'}, status=status.HTTP_400_BAD_REQUEST)
         shipping_address = shipping_address_serializer.save()
-        order = serializer.save(shipping_address=shipping_address)
+        order = serializer.save(shipping_address=shipping_address, other_costs=Decimal(0.0000), shipping_cost=Decimal(0.0000))
 
         #Try making payment
         try:
@@ -334,6 +334,7 @@ class OrderCreateAPIView(CreateAPIView):
             amount = amount / 100
             payment = Payment(email=order.email, ip_address=order.cart.ip_address, stripe_charge_id=stripe_charge_id,
                               amount=amount)
+
             payment.save()
             order.ordered = True
             order.payment = payment

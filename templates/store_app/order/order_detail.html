@@ -51,6 +51,11 @@
             </div>
 
             <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Servicio de shipping: </span>
+              <p class="detail-obj-info-p">{{object.shipping_company}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
               <span class="detail-obj-info-span">ID del shipping (UPS/Fedex): </span>
               <p class="detail-obj-info-p">{{object.shipping_address_id}}</p>
             </div>
@@ -66,6 +71,28 @@
             <div class="detail-obj-info-div">
               <span class="detail-obj-info-span">Cantidad pagada: </span>
               <p class="detail-obj-info-p">${{object.payment.amount}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Costo de produccion: </span>
+              <p class="detail-obj-info-p">${{object.production_cost}}</p>
+            </div>
+
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Costo de envio: </span>
+              <p class="detail-obj-info-p">${{object.shipping_cost}}</p>
+            </div>
+
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Otros costos: </span>
+              <p class="detail-obj-info-p">${{object.other_costs}}</p>
+            </div>
+
+            <div class="detail-obj-info-div">
+              <span class="detail-obj-info-span">Ganancia: </span>
+              <p class="detail-obj-info-p">${{object.findProfit}}</p>
             </div>
 
             <div class="detail-obj-info-div">

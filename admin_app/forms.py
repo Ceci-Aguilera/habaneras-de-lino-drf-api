@@ -71,7 +71,8 @@ class ClothingProductForm(ModelForm):
             'categories': 'Categorias',
             'available_colors': 'Colores disponibles',
             'base_pricing': 'Precio base',
-            'amount_sold': 'Cantidad Vendida'
+            'amount_sold': 'Cantidad Vendida',
+            'production_cost': 'Costo de produccion'
         }
 
 
@@ -79,7 +80,8 @@ class OrderForm(ModelForm):
     class Meta:
         model = Order
         fields = ('cart', 'email', 'phone', 'first_name', 'last_name', 'status',
-                  'shipping_address', 'shipping_tracking_id', 'comments')
+                  'shipping_address', 'shipping_tracking_id', 'comments',
+                  'shipping_company', 'shipping_cost', 'other_costs')
         labels = {
             'cart': 'Carrito',
             'email': 'Email del cliente',
@@ -89,7 +91,10 @@ class OrderForm(ModelForm):
             'shipping_address': 'Direccion del cliente',
             'shipping_tracking_id': 'ID del shipping (UPS/Fedex)',
             'status': 'Estado de la orden',
-            'comments': 'Commentarios a tener en cuenta para la orden'
+            'comments': 'Commentarios a tener en cuenta para la orden',
+            'shipping_company': 'Compañia de shipping',
+            'shipping_cost': 'Costo de envio',
+            'other_costs': 'Otros costos'
         }
 
 

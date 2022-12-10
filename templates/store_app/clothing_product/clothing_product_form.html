@@ -53,10 +53,13 @@
             </div>
 
             <div class="row">
-              <div class="form-group col-md-6 mb-0">
+              <div class="form-group col-md-4 mb-0">
                 {{ form.base_pricing|as_crispy_field }}
               </div>
-              <div class="form-group col-md-6 mb-0">
+              <div class="form-group col-md-4 mb-0">
+                {{ form.production_cost|as_crispy_field }}
+              </div>
+              <div class="form-group col-md-4 mb-0">
                 {{ form.amount_sold|as_crispy_field }}
               </div>
             </div>

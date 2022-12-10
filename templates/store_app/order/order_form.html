@@ -67,6 +67,32 @@
              </div>
            </div>
 
+
+            <div class="row">
+             <div class="form-group col-md-6 mb-0">
+                {{ form.shipping_company|as_crispy_field }}
+             </div>
+             <div class="form-group col-md-6 mb-0">
+               {{ form.shipping_tracking_id|as_crispy_field }}
+             </div>
+           </div>
+
+
+            <div class="row">
+             <div class="form-group col-md-6 mb-0">
+                {{ form.status|as_crispy_field }}
+             </div>
+           </div>
+
+           <div class="row">
+            <div class="form-group col-md-6 mb-0">
+               {{ form.shipping_cost|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-6 mb-0">
+              {{ form.other_costs|as_crispy_field }}
+            </div>
+          </div>
+
                 {{ form.comments|as_crispy_field }}
 
             <div class="create-obj-button-div">

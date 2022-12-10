@@ -37,13 +37,8 @@
           <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <a class="navbar-brand" href="{% url 'admin_app:index' %}">Habaneras de Lino</a>
             <ul class="navbar-nav mt-2 mt-lg-0 justify-content-center">
-              <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Productos</a>
-                  <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Mas Vendidos</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="{% url 'admin_app:clothing-product-list' %}">Todos</a>
-                  </div>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'admin_app:clothing-product-list' %}">Productos</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin_app:collection-list' %}">Colecciones</a>
@@ -70,6 +65,10 @@
           </div>
         </nav>
 
+        {% block content %}
+        
+        {% endblock %}
+
   {% else %}
 
        <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -80,11 +79,12 @@
         <a class="navbar-brand" href="#">Habaneras de Lino</a>
       </div>
     </nav>
+
+    <p>You are not logged in</p>
+    <a href="{% url 'admin_app:login' %}">Log In</a>
+
 {% endif %}
 
-
-    {% block content %}
-    {% endblock %}
   </main>
 
     <script src="{% static 'js/popper.min.js' %}"></script>

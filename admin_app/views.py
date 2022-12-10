@@ -254,20 +254,22 @@ class ClothingProductCreate(CreateView):
 
 class ClothingProductFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
+    code = django_filters.CharFilter(lookup_expr='icontains')
     collections = django_filters.ModelChoiceFilter(queryset=ClothingCollection.objects.all())
     categories = django_filters.ModelChoiceFilter(queryset=Category.objects.all())
 
     class Meta:
         model = ClothingProduct
-        fields = ['name', 'collections', 'categories']
+        fields = ['name', 'code', 'collections', 'categories']
 
 
 class ClothingProductSimpleFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
+    code = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = ClothingProduct
-        fields = ['name',]
+        fields = ['name', 'code']
 
 
 class ClothingProductList(FilterView):

@@ -62,11 +62,15 @@
     <div class="filters-div">
             <form action="" method="get" class="filters-form">
                 <div class="form-group mb-0 product-filter-div row">
-                  <div class="product-filter-wrapper product-filter-form-field col-md-1"></div>
-                  
+
                     <div class="product-filter-wrapper product-filter-form-field col-md-3">
                         {{ filter.form.name | as_crispy_field }}
                     </div>
+
+                    <div class="product-filter-wrapper product-filter-form-field col-md-2">
+                        {{ filter.form.code | as_crispy_field }}
+                    </div>
+
                     {% if filter.form.collections %}
                         <div class="product-filter-wrapper product-filter-form-field col-md-3">
                             {{ filter.form.collections | as_crispy_field }}
@@ -147,19 +151,21 @@
               <div class="row">
                   {% for product_obj in filter.qs %}
                       <div class="col-3">
+                        <a href="{% url 'admin_app:clothing-product-update' product_obj.id %}" class="list-obj-link">
+
                           <div class="card collection-card">
                               <img src="{{product_obj.primary_image.url}}" alt="Product {{ product_obj.name }}"
                                 class="card-img collection-card-image"
                               />
                               <div class="card-body collection-card-body">
                                   {{ product_obj.name }} {{ product_obj.code }}
-                                  <a href="{% url 'admin_app:clothing-product-update' product_obj.id %}" class="list-obj-link">
-                                      <span style="color: #c0a16b;">
+                                <span style="color: #c0a16b;">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                       </span>
-                                  </a>
                               </div>
                           </div>
+
+                      </a>
                       </div>
                   {% endfor %}
             </div>

@@ -103,19 +103,21 @@
               <div class="row">
                   {% for category_obj in object_list %}
                       <div class="col-3">
+                        <a href="{% url 'admin_app:category-update' category_obj.id %}" class="list-obj-link">
+
                           <div class="card collection-card">
                               <img src="{{category_obj.image.url}}" alt="Category {{ category_obj.title }}"
                                 class="card-img collection-card-image"
                               />
                               <div class="card-body collection-card-body">
                                   {{ category_obj.title }} {{ category_obj.year }}
-                                  <a href="{% url 'admin_app:category-update' category_obj.id %}" class="list-obj-link">
-                                      <span style="color: #c0a16b;">
+                                  <span style="color: #c0a16b;">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                       </span>
-                                  </a>
                               </div>
                           </div>
+
+                      </a>
                       </div>
                   {% endfor %}
             </div>

@@ -7,7 +7,7 @@ app_name = 'admin_app'
 
 urlpatterns = [
     re_path(r'^accounts/', include("django.contrib.auth.urls")),
-    re_path(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    re_path(r'^$',  ClothingProductList.as_view(), name='index'),
     # Collections
     re_path(r'^collections/create/$', ClothingCollectionCreate.as_view(), name='collection-create'),
     re_path('collections/$', ClothingCollectionList.as_view(), name='collection-list'),

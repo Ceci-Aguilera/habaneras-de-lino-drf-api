@@ -90,8 +90,8 @@
             <th scope="col">Fecha</th>
             <th scope="col">Status</th>
             <th scope="col">Direccion</th>
-            <th scope="col">Shipping ID</th>
-            <th scope="col">Total</th>
+            <th scope="col">Pago</th>
+            <th scope="col">Ganancia</th>
             <th scope="col">Detalles</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
@@ -106,9 +106,9 @@
                         <td>{{ user_order_obj.phone }}</td>
                         <td>{{ user_order_obj.ordered_date }}</td>
                         <td>{{ user_order_obj.status }}</td>
-                        <td>{{ user_order_obj.shipping_address }}</td>
-                        <td>{{ user_order_obj.shipping_tracking_id }}</td>
+                        <td>{{ user_order_obj.shipping_address.usa_state }}</td>
                         <td>{{ user_order_obj.payment.amount }}</td>
+                        <td>{{ user_order_obj.findProfit }}</td>
                         <td><a href="{% url 'admin_app:order-detail' user_order_obj.id %}" class="list-obj-link">
                             <span style="color: #c0a16b;">
                                <i class="fa-solid fa-eye"></i> Detalles

@@ -76,3 +76,9 @@ ORDER_STATUS_CHOICES = (
     ('CANCELADO', 'CANCELADO'),
     ('REFUND', 'REFUND')
 )
+
+SHIPPING_COMPANIES = (
+    ('UPS', 'UPS'),
+    ('FedEx', 'FedEx'),
+    ('Other', 'Other')
+)

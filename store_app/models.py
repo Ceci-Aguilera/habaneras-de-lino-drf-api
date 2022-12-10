@@ -110,6 +110,7 @@ class ClothingProduct(models.Model):
 
     base_pricing = CurrencyDecimalField()
     amount_sold = models.IntegerField(default=0)
+    production_cost = CurrencyDecimalField(default=0.0000)
 
     def __str__(self):
         return self.name + " " + self.code
@@ -210,9 +211,26 @@ class Order(models.Model):
     ordered_date = models.DateTimeField(auto_now_add=True, blank=True,null=True)
     ordered = models.BooleanField(default=False)
     status = models.CharField(max_length=256, choices=ORDER_STATUS_CHOICES, default='ORDEN_CREADA')
+    shipping_company = models.CharField(max_length=50, choices=SHIPPING_COMPANIES, default='UPS')
     shipping_tracking_id = models.CharField(max_length=256, default='', null=True, blank=True)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, blank=True)
+    shipping_cost = CurrencyDecimalField()
+    other_costs = CurrencyDecimalField()
     comments = models.TextField(blank=True)
+
+    @property
+    def findProfit(self):
+        if self.payment is not None:
+            return (self.payment.amount - self.production_cost() - self.shipping_cost - self.other_costs)
+        return 0.0000
+
+    def production_cost(self):
+        total_productio_cost = Decimal(0.0000)
+        if self.cart is not None:
+            items = self.cart.product_variation_set.all().only('product')
+            for item in items:
+                total_productio_cost += item.product.production_cost
+        return total_productio_cost
 
     def __str__(self):
         return self.email + ' - ' + str(self.ordered_date)
