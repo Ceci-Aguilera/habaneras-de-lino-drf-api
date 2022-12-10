@@ -93,7 +93,6 @@ class ClothingCollectionsByNameYearListAPIView(ListAPIView):
         name = list(self.request.data['name'])
         year = self.request.data['year']
         queryset = ClothingCollection.objects.filter(title__in=name, year=year)
-        print(queryset)
         return queryset
 
     def get_serializer_context(self):
