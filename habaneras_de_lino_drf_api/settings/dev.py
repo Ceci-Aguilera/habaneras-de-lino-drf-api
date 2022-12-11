@@ -1,5 +1,8 @@
 import environ
 from .base import *
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 DEBUG = True
 
@@ -35,3 +38,12 @@ EMAIL_PORT = 587
 
 STRIPE_PUBLIC_KEY=env("STRIPE_PUBLIC_KEY")
 STRIPE_SECRET_KEY=env("STRIPE_SECRET_KEY")
+
+cloudinary.config(
+  cloud_name = env('CLOUDINARY_CLOUD_NAME'),
+  api_key = env('CLOUDINARY_API_KEY'),
+  api_secret = env('CLOUDINARY_API_SECRET')
+)
+
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

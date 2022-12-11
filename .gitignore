@@ -127,6 +127,10 @@ env.bak/
 venv.bak/
 pythonenv*
 
+# Production settings
+prod.py
+prod.py/
+
 # Spyder project settings
 .spyderproject
 .spyproject

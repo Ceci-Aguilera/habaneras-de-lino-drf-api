@@ -3,9 +3,11 @@ backports.zoneinfo==0.2.1
 certifi==2022.9.24
 cffi==1.15.1
 charset-normalizer==2.1.1
+cloudinary==1.30.0
 crispy-bootstrap5==0.6
 cryptography==37.0.4
 Django==4.0.6
+django-cloudinary-storage==0.3.0
 django-cors-headers==3.13.0
 django-crispy-forms==1.14.0
 django-environ==0.9.0
@@ -20,6 +22,7 @@ psycopg2-binary==2.9.3
 pycparser==2.21
 pytz==2022.1
 requests==2.28.1
+six==1.16.0
 sqlparse==0.4.2
 stripe==5.0.0
 urllib3==1.26.12
